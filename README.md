@@ -3,12 +3,7 @@
 This repository provides an **end-to-end pipeline for bioacoustic species call detection** using convolutional neural networks (CNNs).  
 It is designed for **weakly supervised detection**, where **only presence calls are fully annotated**, and absence is implicit.
 
-
-The pipeline is notebook-driven and focuses on:
-- Audio preprocessing
-- CNN training
-- Batch prediction
-- Event-based detection evaluation (PAM-oriented)
+The pipeline is notebook-driven and focuses on audio preprocessing, CNN training,batch prediction, and event-based detection evaluation (PAM-oriented)
 
 
 ---
@@ -92,7 +87,7 @@ data/processed/
 
 
 ### 2️⃣ Model Training  
-**`02_training_cnn.ipynb`**
+**`training_demos.ipynb`**
 
 
 Purpose:
@@ -113,7 +108,6 @@ models/weights/
 
 
 ### 3️⃣ Batch Prediction  
-**`03_prediction_batch.ipynb`**
 
 
 Purpose:
@@ -134,7 +128,6 @@ results/predictions/
 
 
 ### 4️⃣ Evaluation  
-**`04_evaluation_metrics.ipynb`**
 
 
 Purpose:
@@ -150,14 +143,9 @@ Metrics include:
 - False Alarms per Hour (FA/h)
 
 
-Output:
+### Example Detection
 
-results/
-├── figures/
-│ └── detection_curve.png
-└── tables/
-└── metrics_summary.csv
-
+![Gibbon call detection](figures/svg.png)
 
 
 ---
