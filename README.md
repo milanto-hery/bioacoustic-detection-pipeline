@@ -66,7 +66,6 @@ This approach is well suited for:
 
 
 ### 1️⃣ Data Preparation  
-**`01_data_preparation.ipynb`**
 
 
 Purpose:
@@ -78,9 +77,9 @@ Purpose:
 
 Output:
 
-data/processed/
-├── X_S.pkl
-├── Y_S.pkl
+      data/processed/
+      ├── X_S.pkl
+      ├── Y_S.pkl
 
 
 ---
@@ -99,8 +98,8 @@ Purpose:
 
 Output:
 
-models/weights/
-└── cnn_<species>_v1.keras
+      models/weights/
+      └── cnn_<species>_v1.keras
 
 
 
@@ -118,9 +117,9 @@ Purpose:
 
 Output:
 
-results/predictions/
-├── file_001.svl
-├── file_002.svl
+      saved_predictions/
+            ├── file_001.svl
+            ├── file_002.svl
 
 
 
