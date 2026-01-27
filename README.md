@@ -12,30 +12,30 @@ The pipeline is notebook-driven and focuses on audio preprocessing, CNN training
 ## 📁 Repository Structure
 
 
-
-bioacoustic-detection-pipeline/
-│
-├── Audio
-├── Annotations
-├── src/ # Core reusable code
-│ ├── data_process
-│ ├── training
-│ └── testing
-│
-├── notebooks/ # Demonstration notebooks (main entry point)
-│ ├── training_demos.ipynb
-│ └── testing_demos.ipynb
-│
-├── saved_models/
-│ └── weights/ # Saved CNN weights (.keras)
-│
-├── saved_prediction/
-│ ├── pred_1/ # 
-│ └── pred_2/ # 
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
+      
+      bioacoustic-detection-pipeline/
+      │
+      ├── Audio
+      ├── Annotations
+      ├── src/ # Core reusable code
+      │ ├── data_process
+      │ ├── training
+      │ └── testing
+      │
+      ├── notebooks/ # Demonstration notebooks (main entry point)
+      │ ├── training_demos.ipynb
+      │ └── testing_demos.ipynb
+      │
+      ├── saved_models/
+      │ └── weights/ # Saved CNN weights (.keras)
+      │
+      ├── saved_prediction/
+      │ ├── pred_1/ # 
+      │ └── pred_2/ # 
+      │
+      ├── requirements.txt
+      ├── .gitignore
+      └── README.md
 
 
 
