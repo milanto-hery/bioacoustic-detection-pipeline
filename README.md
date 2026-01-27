@@ -68,39 +68,21 @@ This approach is well suited for:
 ### 1️⃣ Data Preparation  
 
 
-Purpose:
 - Load WAV files and annotations
 - Extract spectrogram features
 - Build training labels
 - Save processed datasets
 
 
-Output:
-
-      data/processed/
-      ├── X_S.pkl
-      ├── Y_S.pkl
-
-
 ---
 
 
 ### 2️⃣ Model Training  
-**`training_demos.ipynb`**
 
-
-Purpose:
 - Load processed features
 - Define CNN architecture
 - Train the model
 - Save trained weights
-
-
-Output:
-
-      models/weights/
-      └── cnn_<species>_v1.keras
-
 
 
 ---
@@ -109,18 +91,9 @@ Output:
 ### 3️⃣ Batch Prediction  
 
 
-Purpose:
 - Load trained CNN weights
 - Apply the model to multiple audio files
 - Generate detection outputs
-
-
-Output:
-
-      saved_predictions/
-            ├── file_001.svl
-            ├── file_002.svl
-
 
 
 ---
@@ -128,18 +101,12 @@ Output:
 
 ### 4️⃣ Evaluation  
 
-
-Purpose:
 - Compare predictions with ground-truth annotations
 - Compute **event-based detection metrics**
 - Visualize detection performance
 
 
-Metrics include:
-- Precision
-- Recall (True Positive Rate)
-- F1-score
-- False Alarms per Hour (FA/h)
+Metrics include, Precision, Recall (True Positive Rate), F1-score and False Alarms per Hour (FA/h)
 
 
 ### Example Detection
@@ -148,9 +115,6 @@ Metrics include:
 
 
 ---
-
-
-## 📊 Evaluation Philosophy
 
 
 - Only presence calls are fully annotated  
