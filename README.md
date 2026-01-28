@@ -12,31 +12,22 @@ The pipeline is notebook-driven and focuses on audio preprocessing, CNN training
 ## 📁 Repository Structure
 
 
-      
       bioacoustic-detection-pipeline/
       │
-      ├── Audio
-      ├── Annotations
-      ├── src/ # Core reusable code
-      │ ├── data_process
-      │ ├── training
-      │ └── testing
+      ├── Audio/                  # Raw audio recordings (WAV)
+      ├── Annotations/            # Ground-truth SVL files
+      ├── src/                    # Core reusable code
+      │   ├── data_process/       # Feature extraction, dataset creation
+      │   ├── training/           # Model architecture and training scripts
+      │   └── testing/            # Batch prediction and evaluation scripts
       │
-      ├── notebooks/ # Demonstration notebooks (main entry point)
-      │ ├── training_demos.ipynb
-      │ └── testing_demos.ipynb
-      │
-      ├── saved_models/
-      │ └── weights/ # Saved CNN weights (.keras)
-      │
-      ├── saved_prediction/
-      │ ├── pred_1/ # 
-      │ └── pred_2/ # 
+      ├── notebooks/              # Demonstration notebooks (main entry point)
+      │   ├── training_demos.ipynb
+      │   └── testing_demos.ipynb
       │
       ├── requirements.txt
       ├── .gitignore
       └── README.md
-
 
 
 ---
@@ -73,9 +64,6 @@ The pipeline follows these steps:
 - Save processed datasets for training.
 
 
----
-
-
 ### 2️⃣ Model Training  
 
 - Load trained CNN weights.
@@ -84,8 +72,6 @@ The pipeline follows these steps:
 
 - Generate predictions in the same format as ground-truth annotations.
 
-
----
 
 
 ### 4️⃣ Evaluation  
@@ -102,10 +88,6 @@ The pipeline follows these steps:
 ![Gibbon call detection](figures/svg.png)
 
 
----
-
-
-
 
 This visualization demonstrates how well the model identifies species calls and aligns with human annotations. White bounding boxes represented the true presence annotations from Sonic Visualiser, while the purple bounding boxes for model predictions.
 
@@ -115,11 +97,15 @@ This visualization demonstrates how well the model identifies species calls and 
 
 ## ⚙️ Installation
 
+Clone the repository:
+
+```bash
+git clone https://github.com/milanto-hery/bioacoustic-detection-pipeline.git
+cd bioacoustic-detection-pipeline
+
 
 Create a Python environment and install dependencies:
 
 
 ```bash
 pip install -r requirements.txt
-
-Tested with Python ≥ 3.9.
