@@ -45,18 +45,17 @@ The pipeline is notebook-driven and focuses on audio preprocessing, CNN training
 ## 🧠 Method Overview
 
 
-1. Audio is segmented into short fixed-length windows  
-2. Time–frequency features (e.g. spectrograms or log-mel) are extracted  
-3. A CNN is trained to detect the presence of a target species  
-4. The trained model is applied to long recordings  
-5. Predictions are evaluated using **event-based metrics**, suitable for
-   partially annotated bioacoustic datasets  
+The pipeline follows these steps:
 
+1. Audio is segmented into short, fixed-length windows.
 
-This approach is well suited for:
-- Passive Acoustic Monitoring (PAM)
-- Rare or low-data species
-- Presence-only annotations
+2. Time–frequency features (e.g., spectrograms or log-mel) are extracted.
+
+3. A CNN is trained to detect the presence of a target species.
+
+4. The trained model is applied to longer recordings for batch prediction.
+
+5. Predictions are evaluated using event-based metrics, which are suitable for partially annotated datasets.
 
 
 ---
@@ -67,11 +66,11 @@ This approach is well suited for:
 
 ### 1️⃣ Data Preparation  
 
+- Load audio WAV files and annotations (SVL format).
 
-- Load WAV files and annotations
-- Extract spectrogram features
-- Build training labels
-- Save processed datasets
+- Extract spectrogram features as input (X) and labels (Y).
+
+- Save processed datasets for training.
 
 
 ---
@@ -79,21 +78,11 @@ This approach is well suited for:
 
 ### 2️⃣ Model Training  
 
-- Load processed features
-- Define CNN architecture
-- Train the model
-- Save trained weights
+- Load trained CNN weights.
 
+- Apply the model to multiple audio files.
 
----
-
-
-### 3️⃣ Batch Prediction  
-
-
-- Load trained CNN weights
-- Apply the model to multiple audio files
-- Generate detection outputs
+- Generate predictions in the same format as ground-truth annotations.
 
 
 ---
@@ -101,12 +90,11 @@ This approach is well suited for:
 
 ### 4️⃣ Evaluation  
 
-- Compare predictions with ground-truth annotations
-- Compute **event-based detection metrics**
-- Visualize detection performance
+- Compare model predictions with ground-truth annotations.
 
+- Compute event-based metrics: Precision, Recall (True Positive Rate), F1-score, and False Alarms per Hour (FA/h).
 
-Metrics include, Precision, Recall (True Positive Rate), F1-score and False Alarms per Hour (FA/h)
+- Metrics are computed at the event level, avoiding bias from unannotated absences.
 
 
 ### Example Detection
@@ -117,14 +105,9 @@ Metrics include, Precision, Recall (True Positive Rate), F1-score and False Alar
 ---
 
 
-- Only presence calls are fully annotated  
-- Absence is treated as implicit background  
-- Metrics are computed at the **event level**, not frame level  
-- No artificial true negatives are introduced  
 
 
-This avoids biased accuracy scores and follows best practices in
-bioacoustic detection research.
+This visualization demonstrates how well the model identifies species calls and aligns with human annotations. White bounding boxes represented the true presence annotations from Sonic Visualiser, while the purple bounding boxes for model predictions.
 
 
 ---
