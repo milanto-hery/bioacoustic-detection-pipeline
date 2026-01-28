@@ -94,15 +94,14 @@ Metrics are computed at the event level, avoiding bias from unannotated absences
 
 Clone the repository:
 
-```bash
-git clone https://github.com/milanto-hery/bioacoustic-detection-pipeline.git
-cd bioacoustic-detection-pipeline
+      ```bash
+      git clone https://github.com/milanto-hery/bioacoustic-detection-pipeline.git
+      cd bioacoustic-detection-pipeline
 
-```bash
 
 
 Install dependencies:
 
 
-```bash
-pip install -r requirements.txt
+      ```bash
+      pip install -r requirements.txt
