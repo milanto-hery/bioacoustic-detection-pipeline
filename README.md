@@ -98,8 +98,10 @@ Clone the repository:
 git clone https://github.com/milanto-hery/bioacoustic-detection-pipeline.git
 cd bioacoustic-detection-pipeline
 
+```bash
 
-Create a Python environment and install dependencies:
+
+Install dependencies:
 
 
 ```bash
