@@ -5,193 +5,172 @@ import pandas as pd
 import librosa
 from xml.dom import minidom
 from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
 
-class model_evaluator():
 
- 
-    # Filename -> datetime
-  
-    def filename_to_datetime(self, date_string):
-        format_code = '%Y%m%d_%H%M%S'
-        datetime_object = datetime.strptime(
-            date_string[date_string.index('+1')+3:], format_code
-        )
-        return datetime_object
-        
-    def read_audio_file(self, file_name, audio_folder):
-        audio_path = os.path.join(audio_folder, file_name)
-        audio_amps, audio_sr = librosa.load(audio_path, sr=None)
-        return audio_amps, audio_sr
-        
-    def get_annotation_information(self, audio_folder, annotation_folder, file_name):
+class model_evaluator:
 
-        xmldoc = minidom.parse(os.path.join(annotation_folder, file_name + '.svl'))
-        itemlist = xmldoc.getElementsByTagName('point')
+    def filename_to_datetime(self, filename):
+        """
+        Example filename:
+        HGSM3AC_0+1_20150616_050750.wav
+        """
+        # remove extension if present
+        base_name = os.path.basename(filename)
+        if base_name.endswith(".wav"):
+            base_name = base_name[:-4]
+    
+        date_str = base_name[base_name.index('+1') + 3:]
+        return datetime.strptime(date_str, "%Y%m%d_%H%M%S")
 
-        start_time, end_time, labels = [], [], []
+    # --------------------------------------------------
+    # read audio
+    # --------------------------------------------------
+    def read_audio(self, audio_path):
+        y, sr = librosa.load(audio_path, sr=None)
+        return y, sr
 
-        if len(itemlist) > 0:
-            datetime_fromfile = self.filename_to_datetime(file_name)
-            audio_amps, sr = self.read_audio_file(file_name + ".wav", audio_folder)
+    # --------------------------------------------------
+    # read SVL file → DataFrame
+    # --------------------------------------------------
+    def read_svl(self, svl_path, audio_path):
+        xmldoc = minidom.parse(svl_path)
+        points = xmldoc.getElementsByTagName("point")
 
-            for s in itemlist:
-                label = str(s.attributes['label'].value)
-                if label == '':
-                    continue
+        y, sr = self.read_audio(audio_path)
+        base_dt = self.filename_to_datetime(os.path.basename(audio_path))
 
-                confidence = 10
-                if ',' in label:
-                    label, confidence = label.split(',')
-                    confidence = int(confidence)
+        rows = []
 
-                if confidence != 10:
-                    continue
+        for p in points:
+            label = p.getAttribute("label")
+            if label == "":
+                continue
 
-                start_seconds = float(s.attributes['frame'].value) / sr
-                duration_seconds = float(s.attributes['duration'].value) / sr
+            frame = float(p.getAttribute("frame"))
+            duration = float(p.getAttribute("duration"))
 
-                start_dt = datetime_fromfile + timedelta(seconds=start_seconds)
-                end_dt = start_dt + timedelta(seconds=duration_seconds)
+            start_sec = frame / sr
+            dur_sec = duration / sr
 
-                start_time.append(start_dt)
-                end_time.append(end_dt)
-                labels.append(label)
+            start_time = base_dt + timedelta(seconds=start_sec)
+            end_time = start_time + timedelta(seconds=dur_sec)
 
-        return pd.DataFrame({
-            'Start': start_time,
-            'End': end_time,
-            'Label': labels
-        })
-        
-    def process_all_files_in_folder(self, audio_folder, annotation_folder, prediction_folder):
+            rows.append({
+                "Start": start_time,
+                "End": end_time,
+                "Label": label
+            })
 
-        df_all_annotations = pd.DataFrame()
-        df_all_predictions = pd.DataFrame()
+        return pd.DataFrame(rows)
 
-        for file in os.listdir(audio_folder):
-            if file.endswith('.wav'):
-                name = file[:-4]
-                df = self.get_annotation_information(audio_folder, annotation_folder, name)
-                df_all_annotations = pd.concat([df_all_annotations, df])
+    # --------------------------------------------------
+    # load all GT + predictions
+    # --------------------------------------------------
+    def load_all(self, audio_folder, gt_folder, pred_folder):
+        df_gt, df_pred = [], []
 
-        for file in os.listdir(prediction_folder):
-            if file.endswith('.svl'):
-                name = file[:-4]
-                df = self.get_annotation_information(audio_folder, prediction_folder, name)
-                df_all_predictions = pd.concat([df_all_predictions, df])
+        for f in os.listdir(audio_folder):
+            if not f.endswith(".wav"):
+                continue
+            name = f[:-4]
+            audio_path = os.path.join(audio_folder, f)
+            gt_path = os.path.join(gt_folder, name + ".svl")
+            if os.path.exists(gt_path):
+                df_gt.append(self.read_svl(gt_path, audio_path))
 
-        return df_all_annotations, df_all_predictions
-        
-    def compute_total_audio_hours(self, audio_folder):
-        total_seconds = 0.0
+        for f in os.listdir(pred_folder):
+            if f.endswith(".svl"):
+                audio_path = os.path.join(audio_folder, f.replace(".svl", ".wav"))
+                if os.path.exists(audio_path):
+                    df_pred.append(self.read_svl(os.path.join(pred_folder, f), audio_path))
+
+        return pd.concat(df_gt, ignore_index=True), pd.concat(df_pred, ignore_index=True)
+
+    # --------------------------------------------------
+    # total audio duration (hours)
+    # --------------------------------------------------
+    def total_audio_hours(self, audio_folder):
+        total_sec = 0.0
         for f in os.listdir(audio_folder):
             if f.endswith(".wav"):
                 y, sr = librosa.load(os.path.join(audio_folder, f), sr=None)
-                total_seconds += len(y) / sr
-        return total_seconds / 3600
-        
-    def count_metrics(
+                total_sec += len(y) / sr
+        return total_sec / 3600.0
+
+    # --------------------------------------------------
+    # MAIN evaluation using percentage overlap
+    # --------------------------------------------------
+    def evaluate(
         self,
-        df_true_annotations,
-        df_pred_annotations,
-        threshold_seconds,
-        audio_folder,
-        presence_label
-    ):
-
-        threshold = timedelta(seconds=threshold_seconds)
-
-        df_true_pos = df_true_annotations[
-            df_true_annotations['Label'] == presence_label
-        ]
-
-        TP = 0
-        matched_predictions = set()
-
-        # -------- TP & FN --------
-        for _, true_row in df_true_pos.iterrows():
-            overlaps = df_pred_annotations[
-                (df_pred_annotations['Start'] <= true_row['End']) &
-                (df_pred_annotations['End'] >= true_row['Start'])
-            ]
-
-            overlaps = overlaps[
-                (overlaps['End'] - overlaps['Start']) >= threshold
-            ]
-
-            if not overlaps.empty:
-                TP += 1
-                matched_predictions.update(overlaps.index)
-
-        FN = len(df_true_pos) - TP
-
-        # -------- FP --------
-        FP = len(df_pred_annotations) - len(matched_predictions)
-
-        # -------- METRICS --------
-        Precision = TP / (TP + FP) if (TP + FP) > 0 else 0
-        Recall = TP / (TP + FN) if (TP + FN) > 0 else 0
-        F1 = (
-            2 * Precision * Recall / (Precision + Recall)
-            if (Precision + Recall) > 0 else 0
-        )
-
-        # -------- FALSE ALARMS / HOUR --------
-        total_audio_hours = self.compute_total_audio_hours(audio_folder)
-        FA_per_hour = FP / total_audio_hours if total_audio_hours > 0 else np.nan
-
-        # -------- DISPLAY --------
-        print('=================================')
-        print('++ EVENT-BASED DETECTION RESULTS ++')
-        print(f'Target species           : {presence_label}')
-        print(f'True presence calls      : {len(df_true_pos)}')
-        print(f'True Positives (TP)      : {TP}')
-        print(f'False Negatives (FN)     : {FN}')
-        print(f'False Positives (FP)     : {FP}')
-        print('---------------------------------')
-        print(f'Precision                : {Precision:.3f}')
-        print(f'Recall (TPR)             : {Recall:.3f}')
-        print(f'F1-score                 : {F1:.3f}')
-        print(f'False alarms / hour      : {FA_per_hour:.2f}')
-        print('=================================')
-
-        return {
-            'TP': TP,
-            'FP': FP,
-            'FN': FN,
-            'Precision': Precision,
-            'Recall': Recall,
-            'F1': F1,
-            'FA_per_hour': FA_per_hour
-        }
-        
-    def threshold_sweep(
-        self,
-        df_true,
+        df_gt,
         df_pred,
         audio_folder,
-        presence_label,
-        thresholds
+        target_label,
+        min_overlap_pct=0.5  # TP if overlap >= 50% of GT duration
     ):
+        TP = 0
+        matched_pred_idx = set()
 
-        recalls, fa_rates = [], []
+        # keep only target species in GT
+        df_gt = df_gt[df_gt["Label"] == target_label]
 
-        for th in thresholds:
-            res = self.count_metrics(
-                df_true,
-                df_pred,
-                threshold_seconds=th,
-                audio_folder=audio_folder,
-                presence_label=presence_label
-            )
-            recalls.append(res['Recall'])
-            fa_rates.append(res['FA_per_hour'])
+        for gt_idx, gt in df_gt.iterrows():
+            # find overlapping predictions
+            overlaps = df_pred[
+                (df_pred["Start"] <= gt["End"]) &
+                (df_pred["End"] >= gt["Start"])
+            ]
 
-        plt.figure()
-        plt.plot(fa_rates, recalls, marker='o')
-        plt.xlabel('False alarms / hour')
-        plt.ylabel('Recall')
-        plt.title('Detection Curve')
-        plt.grid(True)
-        plt.show()
+            # compute percentage overlap
+            pct_overlap = []
+            for pred_idx, pred in overlaps.iterrows():
+                latest_start = max(gt["Start"], pred["Start"])
+                earliest_end = min(gt["End"], pred["End"])
+                overlap_sec = (earliest_end - latest_start).total_seconds()
+                gt_duration = (gt["End"] - gt["Start"]).total_seconds()
+                pct_overlap.append((pred_idx, overlap_sec / gt_duration))
+
+            # keep only predictions with enough overlap
+            matched = [idx for idx, pct in pct_overlap if pct >= min_overlap_pct]
+
+            if matched:
+                TP += 1
+                matched_pred_idx.update(matched)
+
+        FN = len(df_gt) - TP
+        FP = len(df_pred) - len(matched_pred_idx)
+
+        # metrics
+        Precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
+        Recall = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+        F1 = 2 * Precision * Recall / (Precision + Recall) if (Precision + Recall) > 0 else 0.0
+
+        # false alarms per hour
+        total_hours = self.total_audio_hours(audio_folder)
+        FP_per_hour = FP / total_hours if total_hours > 0 else np.nan
+
+        # print results
+        print("=" * 45)
+        print(" EVENT-BASED DETECTION EVALUATION (percentage overlap) ")
+        print("=" * 45)
+        print(f"Target species        : {target_label}")
+        print(f"True events (GT)      : {len(df_gt)}")
+        print(f"True Positives (TP)   : {TP}")
+        print(f"False Negatives (FN)  : {FN}")
+        print(f"False Positives (FP)  : {FP}")
+        print("-" * 45)
+        print(f"Precision             : {Precision:.3f}")
+        print(f"Recall                : {Recall:.3f}")
+        print(f"F1-score              : {F1:.3f}")
+        print(f"False alarms / hour   : {FP_per_hour:.2f}")
+        print("=" * 45)
+
+        return {
+            "TP": TP,
+            "FP": FP,
+            "FN": FN,
+            "Precision": Precision,
+            "Recall": Recall,
+            "F1": F1,
+            "FP_per_hour": FP_per_hour
+        }
