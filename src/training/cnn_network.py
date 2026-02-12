@@ -1,7 +1,3 @@
-"""
-cnn_network.py
-Model builders. Keep a simple baseline CNN and wrappers for pretrained backbones (optional).
-"""
 
 import tensorflow as tf
 from tensorflow.keras import layers, models
