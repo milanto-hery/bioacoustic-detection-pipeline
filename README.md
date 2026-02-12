@@ -14,7 +14,7 @@ It is designed for **weakly supervised detection**, where **only presence calls 
       │
       ├── Audio/                  # Raw audio recordings (WAV)
       ├── Annotations/            # Ground-truth SVL files
-      ├── src/                    # Core reusable code
+      ├── src/                   
       │   ├── data_process/       # Feature extraction, dataset creation
       │   ├── training/           # Model architecture and training scripts
       │   └── testing/            # Batch prediction and evaluation scripts
