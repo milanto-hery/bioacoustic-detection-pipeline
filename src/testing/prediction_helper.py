@@ -49,8 +49,6 @@ class prediction_helper:
         self.audio_extension = audio_extension
         self.saved_weights_folder = saved_weights_folder
 
-    
-
     # create sliding segments (1s -> list)
 
     def create_segments(self, mono_data: np.ndarray, time_to_extract: int, sample_rate: int) -> np.ndarray:
@@ -80,7 +78,7 @@ class prediction_helper:
         res = librosa.resample(amplitudes, orig_sr=original_sr, target_sr=new_sample_rate, res_type="soxr_hq")
         return res, new_sample_rate
 
-    # --- Spectrogram Utilities ---
+    # Spectrogram utilities
 
     def convert_single_to_image(self, audio: np.ndarray) -> np.ndarray:
         # 1. Generate Mel Spectrogram
