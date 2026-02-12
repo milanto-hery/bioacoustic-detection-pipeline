@@ -22,16 +22,15 @@ class model_evaluator:
         date_str = base_name[base_name.index('+1') + 3:]
         return datetime.strptime(date_str, "%Y%m%d_%H%M%S")
 
-    # --------------------------------------------------
     # read audio
-    # --------------------------------------------------
+    
     def read_audio(self, audio_path):
         y, sr = librosa.load(audio_path, sr=None)
         return y, sr
 
-    # --------------------------------------------------
+  
     # read SVL file → DataFrame
-    # --------------------------------------------------
+  
     def read_svl(self, svl_path, audio_path):
         xmldoc = minidom.parse(svl_path)
         points = xmldoc.getElementsByTagName("point")
@@ -63,9 +62,8 @@ class model_evaluator:
 
         return pd.DataFrame(rows)
 
-    # --------------------------------------------------
     # load all GT + predictions
-    # --------------------------------------------------
+    
     def load_all(self, audio_folder, gt_folder, pred_folder):
         df_gt, df_pred = [], []
 
@@ -86,9 +84,8 @@ class model_evaluator:
 
         return pd.concat(df_gt, ignore_index=True), pd.concat(df_pred, ignore_index=True)
 
-    # --------------------------------------------------
     # total audio duration (hours)
-    # --------------------------------------------------
+
     def total_audio_hours(self, audio_folder):
         total_sec = 0.0
         for f in os.listdir(audio_folder):
@@ -97,9 +94,9 @@ class model_evaluator:
                 total_sec += len(y) / sr
         return total_sec / 3600.0
 
-    # --------------------------------------------------
+
     # MAIN evaluation using percentage overlap
-    # --------------------------------------------------
+
     def evaluate(
         self,
         df_gt,
