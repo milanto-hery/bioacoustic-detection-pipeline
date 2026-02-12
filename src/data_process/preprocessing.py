@@ -1,7 +1,3 @@
-"""
-preprocess.py
-Cleaned PreprocessingImage -> audio filtering, downsampling, segmentation and spectrogram conversion.
-"""
 import os
 import pickle
 from typing import Tuple, List
@@ -54,43 +50,7 @@ class preprocessing:
 
         os.makedirs(self.saved_data_path, exist_ok=True)
 
-    # # -----------------------
-    # # Audio utilities
-    # # -----------------------
-    # def read_audio_file(self, file_path: str) -> Tuple[Array, int]:
-    #     audio, sr = librosa.load(file_path, sr=None)
-    #     return audio, sr
-
-    # def butter_lowpass_filter(self, data: Array, cutoff_freq: float, nyq_freq: float, order: int = 4) -> Array:
-    #     normal_cutoff = float(cutoff_freq) / nyq_freq
-    #     b, a = signal.butter(order, normal_cutoff, btype="lowpass")
-    #     y = signal.filtfilt(b, a, data)
-    #     return y
-
-    # def downsample_file(self, amplitudes: Array, original_sr: int, new_sample_rate: int) -> Tuple[Array, int]:
-    #     res = librosa.resample(amplitudes, orig_sr=original_sr, target_sr=new_sample_rate, res_type="kaiser_fast")
-    #     return res, new_sample_rate
-
-    # # -----------------------
-    # # Spectrogram utilities
-    # # -----------------------
-    # def convert_single_to_image(self, audio: Array) -> Array:
-        
-    #     S = librosa.feature.melspectrogram(
-    #         y=audio, sr=self.downsample_rate, n_fft=self.n_fft, hop_length=self.hop_length, n_mels=self.n_mels, fmin=self.f_min, fmax=self.f_max
-    #     )
-
-    #     S_db = librosa.power_to_db(S)
-    #     eps = 1e-8
-    #     mean = S_db.mean()
-    #     std = S_db.std()
-    #     S_norm = (S_db - mean) / (std + eps)
-    #     S_min, S_max = S_norm.min(), S_norm.max()
-    #     S_scaled = (S_norm - S_min) / (S_max - S_min + eps)
-    #     return S_scaled
-
-    # def convert_all_to_image(self, segments: List[Array]) -> Array:
-    #     return np.array([self.convert_single_to_image(seg) for seg in segments], dtype=np.float32)
+    # Audio utilities
     
     def read_audio_file(self, file_path: str) -> Tuple[np.ndarray, int]:
         # sr=None preserves original 9600Hz
@@ -109,7 +69,7 @@ class preprocessing:
         res = librosa.resample(amplitudes, orig_sr=original_sr, target_sr=new_sample_rate, res_type="soxr_hq")
         return res, new_sample_rate
 
-    # --- Spectrogram Utilities ---
+    # Spectrogram Utilities
 
     def convert_single_to_image(self, audio: np.ndarray) -> np.ndarray:
         # 1. Generate Mel Spectrogram
@@ -143,9 +103,8 @@ class preprocessing:
     def add_extra_dim(self, spectrograms: Array) -> Array:
         return spectrograms.reshape((spectrograms.shape[0], spectrograms.shape[1], spectrograms.shape[2], 1))
 
-    # -----------------------
     # Segmentation
-    # -----------------------
+    
     def getXY(self, audio_amplitudes: Array, start_sec: int, annotation_duration_seconds: int, label: str, verbose: bool = False):
         X_segments = []
         Y_labels = []
@@ -171,9 +130,8 @@ class preprocessing:
 
         return X_segments, Y_labels
 
-    # -----------------------
     # Saving / loading
-    # -----------------------
+    
     def save_spec_data_to_pickle(self, X: Array, Y: Array):
         with open(os.path.join(self.saved_data_path, "X_S.pkl"), "wb") as f:
             pickle.dump(X, f, protocol=4)
@@ -187,9 +145,8 @@ class preprocessing:
             Y = pickle.load(f)
         return X, Y
 
-    # -----------------------
     # Pipeline: create dataset from training list
-    # -----------------------
+
     def create_dataset(self, verbose: bool = False):
         X_calls = []
         Y_calls = []
