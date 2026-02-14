@@ -38,7 +38,7 @@ The pipeline follows these steps:
 
 1. Audio is segmented into short, fixed-length windows.
 
-2. Time–frequency features (e.g., spectrograms or log-mel) are extracted.
+2. Time–frequency features (spectrograms) are extracted.
 
 3. A CNN is trained to detect the presence of a target species.
 
