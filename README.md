@@ -53,7 +53,7 @@ The pipeline follows these steps:
 ## 📓 Notebooks (How to Use This Repo)
 
 
-### 1️⃣ Training  
+### Training  
 
 - Load audio WAV files and annotations (SVL format).
 
@@ -62,7 +62,7 @@ The pipeline follows these steps:
 - Save processed datasets for training.
 
 
-### 2️⃣ Prediction
+### Prediction
 
 - Load trained CNN weights.
 
@@ -72,7 +72,7 @@ The pipeline follows these steps:
 
 
 
-### 4️⃣ Evaluation  
+### Evaluation  
 
 - Compare model predictions with ground-truth annotations.
 
