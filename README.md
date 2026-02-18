@@ -91,7 +91,7 @@ Metrics are computed at the event level, avoiding bias from unannotated absences
 ---
 
 
-## ⚙️ Installation
+## Installation
 
 Clone the repository:
 
