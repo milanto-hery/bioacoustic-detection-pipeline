@@ -51,7 +51,7 @@ The pipeline follows these steps:
 ---
 
 
-## 📓 Notebooks (How to Use This Repo)
+## How to Use This Repo
 
 
 ### Training  
@@ -60,7 +60,7 @@ The pipeline follows these steps:
 
 - Extract spectrogram features as input (X) and labels (Y).
 
-- Save processed datasets for training.
+- Save processed datasets and train the model.
 
 
 ### Prediction
