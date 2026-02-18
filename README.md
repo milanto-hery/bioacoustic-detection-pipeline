@@ -7,7 +7,7 @@ It is designed for **weakly supervised detection**, where **only presence calls 
 ---
 
 
-## 📁 Repository Structure
+## Repository Structure
 
 
       bioacoustic-detection-pipeline/
@@ -32,7 +32,7 @@ It is designed for **weakly supervised detection**, where **only presence calls 
 ---
 
 
-## 🧠 Method Overview
+## Method Overview
 
 
 The pipeline follows these steps:
