@@ -1,17 +1,9 @@
-# Fixed NumPy to satisfy Numba and Audio processing
 numpy==1.23.5
 numba>=0.57.0
-
-# Audio Processing
 librosa
 soundfile
-
-# Data & Visualization
 pandas
 matplotlib
 scipy
-
-# Neural Network
 tensorflow
-
 resampy
