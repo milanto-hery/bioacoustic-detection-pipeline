@@ -1,0 +1,38 @@
+# BioAcoustica Species Configuration: Gibbon
+
+species_name: "gibbon"
+
+# Class Mapping
+classes:
+  positive: "gibbon"
+  absence: "no-gibbon"
+  # Order for one-hot encoding
+  order: ["no-gibbon", "gibbon"]
+
+# Audio Processing Parameters
+audio:
+  sample_rate: 8000
+  lowpass_cutoff: 3500
+  nyquist_rate: 4000
+  segment_duration: 4
+  audio_extension: ".wav"
+
+# Spectrogram Parameters
+spectrogram:
+  n_fft: 1024
+  hop_length: 256
+  n_mels: 128
+  f_min: 400
+  f_max: 4000
+
+# Training Hyperparameters
+# Architecture choices: custom_cnn | mobilenet_v2 | efficientnet_b0
+training:
+  architecture: "custom_cnn"
+  epochs: 20
+  batch_size: 32
+  train_size: 0.8
+  augment: true
+  seed: 42
+  dropout_rate: 0.3
+  fine_tune: false   # Set to true to fine-tune pre-trained backbone

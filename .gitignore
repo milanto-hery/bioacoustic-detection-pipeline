@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data (large files, raw audio, predictions)
+data/raw/
+data/processed/
+data/predictions/
+
+# Models (large binary files)
+models/
+
+# Logs & output
+*.log
+*.csv
+
+# TensorFlow / Keras
+*.h5
+*.pb
+*.tfevents.*
+saved_model/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.env

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bioacoustica"
+version = "0.1.0"
+description = "A Modular, Species-Agnostic Framework for Scalable Bioacoustic Monitoring"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "BioAcoustica Contributors" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy==1.23.5",
+    "tensorflow==2.13.0",
+    "protobuf==3.20.3",
+    "librosa",
+    "pandas",
+    "pyyaml",
+    "scipy",
+    "matplotlib",
+    "seaborn",
+    "scikit-learn",
+    "yattag",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+bioacoustica-preprocess = "cli.preprocess:main"
+bioacoustica-train = "cli.train:main"
+bioacoustica-predict = "cli.predict:main"
+bioacoustica-evaluate = "cli.evaluate:main"
