@@ -2,7 +2,7 @@
 
 ### A Modular, Species-Agnostic Framework for Scalable Bioacoustic Monitoring
 
-BioAcoustica is a high-quality, open-source framework designed to simplify the pipeline for bioacoustic detection and surveillance. Whether you are monitoring gibbons in a rainforest or bees in a hive, BioAcoustica provides the tools to process audio, train deep learning models, and evaluate performance with research-grade rigor.
+BioAcoustica is a high-quality, open-source framework designed to simplify the pipeline for bioacoustic detection and surveillance. Whether you are monitoring animal species in a rainforest, BioAcoustica provides the tools to process audio, train deep learning models, and evaluate performance with research-grade rigor.
 
 ## 🚀 Pipeline Architecture
 
