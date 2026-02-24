@@ -102,7 +102,7 @@ python cli/evaluate.py --config configs/gibbon.yaml \
 
 ## 📊 Research Metrics
 
-Validated on a strict, isolated 8-file test set (~3.18 hours of audio):
+Validated on a strict, isolated 2-file test set (~3.18 hours of audio):
 
 | Metric | Value |
 |---|---|
