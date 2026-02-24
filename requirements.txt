@@ -1,15 +1,24 @@
-numpy>=1.23.5,<1.24.0
-librosa>=0.10.0
-soundfile>=0.12.1
+# Core Dependencies
+numpy>=1.23.5,<1.26.0
 pandas>=2.0.0
-matplotlib>=3.7.0
 scipy>=1.10.0
-tensorflow==2.13.0
-yattag>=1.15.1
 pyyaml>=6.0
 tqdm>=4.65.0
+typing-extensions>=4.6.0
+
+# Audio Processing
+librosa>=0.10.0
+soundfile>=0.12.1
+
+# Deep Learning
+# Fanamarihana: Raha Python 3.12 ianao, tsara kokoa ny TensorFlow 2.15+
+tensorflow>=2.13.0,<2.16.0
+protobuf>=3.20.0,<4.0.0
+
+# Visualization & Dashboard
+matplotlib>=3.7.0
 seaborn>=0.12.0
 scikit-learn>=1.2.0
-typing-extensions>=4.6.0
+yattag>=1.15.1
 streamlit>=1.31.0
 setuptools>=61.0
