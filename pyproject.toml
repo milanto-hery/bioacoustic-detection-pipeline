@@ -42,3 +42,6 @@ bioacoustica-preprocess = "cli.preprocess:main"
 bioacoustica-train = "cli.train:main"
 bioacoustica-predict = "cli.predict:main"
 bioacoustica-evaluate = "cli.evaluate:main"
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
