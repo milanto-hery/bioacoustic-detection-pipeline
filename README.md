@@ -26,7 +26,7 @@ graph TD
 ## 🛠️ Features
 
 - **YAML Config Driven**: Centralize species parameters in a single file — sample rate, class labels, model architecture.
-- **Species Agnostic**: Fully configurable for any sound class. Zero gibbon-specific code in the library.
+- **Species Agnostic**: Fully configurable for any sound class.
 - **Model Factory**: Switch architectures with one line — `CustomCNN`, `MobileNetV2`, or `EfficientNetB0`.
 - **Robust Feature Extraction**: Log-Mel spectrogram generation with lowpass filtering, downsampling, and augmentation.
 - **Research-Grade Evaluation**: Event merging, absolute-timestamp matching, and a 50% overlap threshold for strict TP classification.
